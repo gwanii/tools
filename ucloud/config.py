@@ -1,0 +1,2 @@
+UCLOUD_PUBLICKEY = 'blabla'
+UCLOUD_PRIVATEKEY = 'bilibili'
