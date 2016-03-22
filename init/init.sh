@@ -5,12 +5,12 @@ PLATFORM=$(grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}')
 VERSION=$(grep "VERSION_ID" /etc/os-release | awk -F "=" '{print $2}' | sed -e 's/^"//' -e 's/"$//')
 if [[ "$PLATFORM" == "Ubuntu" ]]; then
     # TODO
-    apt-get update -y && apt-get install -y gcc libffi-dev python-dev libssl-dev vim wget curl git
+    apt-get update -y && apt-get install -y gcc gcc-c++ libffi-dev python-dev libssl-dev vim wget curl git
 else
     yum install -y wget		
     mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
     wget -O /etc/yum.repos.d/CentOS-Base.repo "http://mirrors.aliyun.com/repo/Centos-$VERSION.repo"
-    yum update -y && yum install -y gcc libffi-devel python-devel openssl-devel vim curl git
+    yum update -y && yum install -y gcc gcc-c++ libffi-devel python-devel openssl-devel vim curl git
 fi
 
 ### pip
