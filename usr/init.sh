@@ -10,7 +10,7 @@ else
     yum install -y wget		
     mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
     wget -O /etc/yum.repos.d/CentOS-Base.repo "http://mirrors.aliyun.com/repo/Centos-$VERSION.repo"
-    yum update -y && yum install -y gcc gcc-c++ libffi-devel python-devel openssl-devel vim curl git
+    yum update -y && yum install -y gcc gcc-c++ make libtool openssl openssl-devel libffi-devel python-devel pcre pcre-devel readline readline-devel vim curl git net-tools brctl-tools lsof nc
 fi
 
 ### pip
