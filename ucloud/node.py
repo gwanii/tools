@@ -10,7 +10,7 @@ import hashlib
 import json
 import logging
 import requests
-from requests.exceptions import ConnectionError, ReadTimeout
+from requests.exceptions import ConnectionError, ReadTimeout, SSLError
 import urllib
 
 from config import UCLOUD_PUBLICKEY, UCLOUD_PRIVATEKEY
@@ -61,7 +61,9 @@ class UCloudAPI(object):
             _log.error('ConnectionError: %s for request <GET %s>', e, self.url)
         except ReadTimeout as e:
             _log.error('ReadTimeout: %s for request <GET %s>', e, self.url)
-        else:
+        except SSLError as e:
+            _log.error('SSLError: %s for request <GET %s>', e, self.url)
+        except:
             _log.error('Error response for request <GET %s>', self.url)
         return {}
 
@@ -134,8 +136,9 @@ class NodeAPI(UCloudAPI):
 
         :return: [u'Action', u'TotalCount', u'RetCode', u'UHostSet']
         """
+#        import pdb; pdb.set_trace()
         with reset_params(self):
-            self.update_params({'Region': region, 'Limit': LIMIT, 'tag': tag})
+            self.update_params({'Region': region, 'Limit': LIMIT, 'Tag': tag})
             return self.get()
 
     @with_action('DescribeUHostInstance')
@@ -183,7 +186,6 @@ class NodeAPI(UCloudAPI):
         cost = 0
         # TODO(ayakashi): multi threading there
         for x in iter(nodes['UHostSet']):
-#            import pdb; pdb.set_trace()
             try:
                 diskspace = self._get_diskspace(x['DiskSet'])
                 node = {
@@ -229,19 +231,15 @@ def get_result_by_region(region='cn-north-03'):
     count_nodes = 0
 
     # the nodes colletion group by tag
-    total_nodes = []
     # TODO(ayakashi): multi threading there
+    print "TagSet: ", tagset['TagSet']
     for tag in iter(tagset['TagSet']):
-        nodes = {}
-        nodes['TotalCount'] = tag['TotalCount']
-        nodes['Tag'] = tag['Tag']
-        nodes['Cost'] = nodeapi.get_total_cost_by_tag(region, nodes['Tag'])
-        total_nodes.append(nodes)
-        count_nodes += nodes['TotalCount']
-
-    return count_nodes, total_nodes 
+        cost = nodeapi.get_total_cost_by_tag(region, tag['Tag'])
+        print '{0},{1},{2}'.format(tag['Tag'], tag['TotalCount'], cost)
+        count_nodes += tag['TotalCount']
+    print "TotalCount: ", count_nodes
 
 
 if __name__ == '__main__':
-    print get_result_by_region()
-#    print NodeAPI().get_node('cn-north-03', 'uhost-lxnjuy')['UHostSet']
+    get_result_by_region('cn-north-03')
+    #print NodeAPI().get_node('cn-north-03', 'uhost-lxnjuy')['UHostSet']
