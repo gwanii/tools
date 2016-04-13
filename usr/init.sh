@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-### source mirror
+### apt-get/yum
 PLATFORM=$(grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}')
 VERSION=$(grep "VERSION_ID" /etc/os-release | awk -F "=" '{print $2}' | sed -e 's/^"//' -e 's/"$//')
 if [[ "$PLATFORM" == "Ubuntu" ]]; then
@@ -26,10 +26,13 @@ else
     echo "`which pip` is available"
 fi
 
-### node.js
+### npm
 git clone https://github.com/cnpm/nvm.git ~/.nvm
 echo -e "\n#node.js \nsource ~/.nvm/nvm.sh" >> ~/.bashrc
 npm install cnpm -g --registry=http://registry.npm.taobao.org
 #npm install microtime \
 #  --registry=http://registry.npm.taobao.org \
 #  --disturl=http://npm.taobao.org/mirrors/node
+
+### gem
+gem sources --add https://ruby.taobao.org/ --remove https://rubygems.org/
