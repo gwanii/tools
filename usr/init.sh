@@ -11,6 +11,19 @@ else
     mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
     wget -O /etc/yum.repos.d/CentOS-Base.repo "http://mirrors.aliyun.com/repo/Centos-$VERSION.repo"
     yum update -y && yum install -y gcc gcc-c++ make libtool openssl openssl-devel libffi-devel python-devel pcre pcre-devel readline readline-devel vim curl git net-tools brctl-tools lsof nc
+    # sudo yum groupinstall 'Development Tools'
+
+
+    # docker
+    sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
+    [dockerrepo]
+    name=Docker Repository
+    baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
+    enabled=1
+    gpgcheck=1
+    gpgkey=https://yum.dockerproject.org/gpg
+    EOF
+    yum install -y docker-engine
 fi
 
 ### pip
@@ -25,14 +38,3 @@ if [[ ! -e /usr/bin/pip ]]; then
 else
     echo "`which pip` is available"
 fi
-
-### npm
-git clone https://github.com/cnpm/nvm.git ~/.nvm
-echo -e "\n#node.js \nsource ~/.nvm/nvm.sh" >> ~/.bashrc
-npm install cnpm -g --registry=http://registry.npm.taobao.org
-#npm install microtime \
-#  --registry=http://registry.npm.taobao.org \
-#  --disturl=http://npm.taobao.org/mirrors/node
-
-### gem
-gem sources --add https://ruby.taobao.org/ --remove https://rubygems.org/

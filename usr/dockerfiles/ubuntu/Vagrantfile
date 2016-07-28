@@ -1,0 +1,31 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/trusty64"
+    
+
+  config.vm.define "torus" do |torus|
+    torus.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--cpus", 2]
+      vb.customize ["modifyvm", :id, "--memory", 2048]
+    end
+
+    torus.vm.hostname = "torus"
+
+    torus.vm.network "private_network", ip: "192.168.100.89"
+
+    torus.vm.provision "fix-no-tty", type: "shell" do |s|
+      s.privileged = false
+      s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+    end
+    
+    torus.vm.provision :file, source: "~/Downloads/downloads/linux", destination: "/home/vagrant/linux"
+    torus.vm.provision :shell, inline: <<-SHELL
+      sudo cp /home/vagrant/linux/* /usr/bin/
+    SHELL
+    torus.vm.provision :docker, images: [
+      "busybox:latest"
+    ]
+  end
+end
