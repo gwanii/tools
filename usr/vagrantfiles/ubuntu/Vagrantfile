@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box     = "ubuntu/trusty64"
+  config.vm.provider "virtualbox" do |vb|
+    # vb.gui = true
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
+  end
+
+  (1..1).each do |i|
+    vm_name = "test-%02d" % i
+    config.vm.define vm_name do |host|
+      host.vm.hostname = vm_name
+    
+      ip = "172.24.24.#{i+100}"
+      host.vm.network :private_network, ip: ip
+      # host.vm.provision "docker"
+      host.vm.provision "shell", inline: "reboot"
+    end
+  end
+end
