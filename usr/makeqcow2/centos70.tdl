@@ -1,0 +1,34 @@
+<template>
+  <name>centos_70_x86_64</name>
+  <description>CentOS 7.0 x86_64 template</description>
+
+  <os>
+    <name>CentOS-7</name>
+    <version>0</version>
+    <arch>x86_64</arch>
+    <rootpw>baicells</rootpw>
+    <install type='iso'>
+      <iso>file:///root/img/CentOS-7.0-1406-x86_64-DVD.iso</iso>
+    </install>
+  </os>
+
+  <commands>
+    <command name='console'>
+sed -i 's/ rhgb//g' /boot/grub2/grub.cfg
+sed -i 's/ quiet//g' /boot/grub2/grub.cfg
+sed -i 's/ console=tty0 / serial=tty0 console=ttyS0,115200n8 /g' /boot/grub2/grub.cfg
+    </command>
+    <command name='network'>
+sed -i '/^HWADDR/d' /etc/sysconfig/network-scripts/ifcfg-eth0
+sed -i 's/ONBOOT=no/ONBOOT=yes/g' /etc/sysconfig/network-scripts/ifcfg-eth0
+echo 'NOZEROCONF=yes' >> /etc/sysconfig/network
+echo -n > /etc/udev/rules.d/70-persistent-net.rules
+echo -n > /lib/udev/rules.d/75-persistent-net-generator.rules
+    </command>
+  </commands>
+
+  <disk>
+    <size>10</size>
+  </disk>
+
+</template>

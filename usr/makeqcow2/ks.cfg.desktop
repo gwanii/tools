@@ -1,0 +1,97 @@
+#version=RHEL7
+
+install
+text
+keyboard us
+lang en_US.UTF-8
+network --device eth0 --bootproto dhcp
+network  --hostname=baicells
+rootpw baicells
+firewall --disabled
+selinux --enforcing
+timezone --utc Asia/Shanghai
+bootloader --location=mbr --append="console=tty0 console=ttyS0,115200 net.ifnames=0"
+
+zerombr
+clearpart --all --initlabel
+autopart --type=plain
+
+reboot
+
+%packages # these packages can get from offline iso
+@base
+@core
+@gnome-desktop
+@x11
+@desktop-debugging
+@dial-up
+@fonts
+@guest-agents
+@guest-desktop-agents
+@input-methods
+@print-client
+@java-platform
+
+-firewalld
+-biosdevname
+acpid
+
+openssh-server
+make
+gcc
+vim
+autoconf
+automake
+libtool
+perl
+libxml2
+libxml2-devel
+iptraf-ng
+net-tools
+ntpdate
+psmisc
+openssl
+openssl-devel
+wireshark-gnome
+
+%end
+
+%post
+# forbid update kernel
+sed -i '/\[main\]/a exclude=kernel* centos-release' /etc/yum.conf
+yum update -y
+yum install -y epel-release
+yum install -y  cloud-init cloud-utils cloud-utils-growpart
+yum install -y  vnc-server
+yum install -y  NetworkManager-config-routing-rules
+
+systemctl enable acpid
+
+cat >> /etc/ssh/sshd_config <<EOF 
+PermitRootLogin yes
+PasswordAuthentication yes
+EOF
+systemctl restart sshd
+
+echo -e 'centos\tALL=(ALL)\tNOPASSWD: ALL' >> /etc/sudoers
+sed -i '/disable_root/d' /etc/cloud/cloud.cfg
+sed -i '/ssh_pwauth/d' /etc/cloud/cloud.cfg
+cat >> /etc/cloud/cloud.cfg <<EOF
+disable_root: 0
+ssh_pwauth:   1
+EOF
+
+# auto part
+rpm -qa kernel | sed 's/^kernel-//'  | xargs -I {} dracut -f /boot/initramfs-{}.img {}
+
+# ntp time sync
+echo -n "0 9 * * * /usr/sbin/ntpdate 0.pool.ntp.org" > /var/spool/cron/root
+
+# arp problem
+cat >> /etc/sysctl.conf <<EOF
+net.ipv4.conf.default.rp_filter = 2
+net.ipv4.conf.all.rp_filter = 2
+EOF
+sysctl -p
+
+%end
