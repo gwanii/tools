@@ -5,8 +5,8 @@ text
 keyboard us
 lang en_US.UTF-8
 network --device eth0 --bootproto dhcp
-network  --hostname=baicells
-rootpw baicells
+network  --hostname=custom
+rootpw custom
 firewall --disabled
 selinux --enforcing
 timezone --utc Asia/Shanghai
@@ -75,7 +75,7 @@ sysctl -p
 # add policy routing scripts
 rm -f /etc/sysconfig/network-scripts/ifcfg-eth0
 mkdir -p /opt/openstack
-sshpass -p "baicells" scp root@192.168.122.1:~/add_policy_routing.sh /opt/openstack/
+#sshpass -p "custom" scp root@192.168.122.1:~/add_policy_routing.sh /opt/openstack/
 chmod 0755 /opt/openstack/add_policy_routing.sh
 chmod 0755 /etc/rc.d/rc.local
 cat <<EOF >> /etc/rc.d/rc.local 

@@ -176,7 +176,7 @@ submenu 'Troubleshooting -->' {
 
 #### 7. 生成镜像
 ``` 
-[root@ctl ~]# genisoimage -v -cache-inodes -joliet-long -R -J -T -V BC -o /root/baicells.iso -c isolinux/boot.cat -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -b images/efiboot.img -no-emul-boot .
+[root@ctl ~]# genisoimage -v -cache-inodes -joliet-long -R -J -T -V BC -o /root/custom.iso -c isolinux/boot.cat -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -b images/efiboot.img -no-emul-boot .
 
 # 注意 "-V BC" 选项对应 isolinux/isolinux.cfg 和 EFI/BOOT/grub.cfg 中的 "LABEL"
 ```

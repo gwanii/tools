@@ -69,12 +69,12 @@ ovs-20160909-1.x86_64.rpm  *---->最终生成的rpm包在此>_< !!!*
 # ovs-20160909.spec
 
 Name:		ovs    *---->软件包名*
-Summary:	Baicells OpenvSwitch  *---->软件包大致功能概要*
+Summary:	Custom OpenvSwitch  *---->软件包大致功能概要*
 Group: 		System Environment/Daemons * ---->软件包类型*
 Version: 	20160909    *---->这个就是软件包的版本*
 Release: 	1 *---->软件包释出号*
 License:        Commercial   *---->licence, 可以是Apache，MIT，GPL，Commecial等等 *
-URL:            http://baicells.com   *---->随便填*
+URL:            http://custom.com   *---->随便填*
 
 Source0: 	ovs-%{version}.tar.gz  *---->这里就是~/rpmbuild/SOURCES/目录下文件*
 Source1: 	ovs.sh  *---->同上*
@@ -85,7 +85,7 @@ Source3:	ovs.service  *---->同上*
 %bcond_without check
 
 %description *---->简要描述*
-Baicells OpenvSwitch
+Custom OpenvSwitch
 
 %prep *---->安装之前的执行脚本，可以写一些安装依赖的脚本*
 yum install -y make
