@@ -42,6 +42,7 @@ sed -i '/\[main\]/a exclude=kernel* centos-release' /etc/yum.conf
 yum update -y
 yum install -y epel-release
 yum install -y acpid
+yum install -y cronie
 yum install -y cloud-init cloud-utils cloud-utils-growpart
 yum install -y net-tools ntpdate psmisc
 yum install -y openssl openssl-devel
@@ -71,6 +72,9 @@ rpm -qa kernel | sed 's/^kernel-//'  | xargs -I {} dracut -f /boot/initramfs-{}.
 
 # ntp time sync
 echo -n "0 9 * * * /usr/sbin/ntpdate 0.pool.ntp.org" > /var/spool/cron/root
+
+# default route gateway
+echo "GATEWAYDEV=eth0" >> /etc/sysconfig/network
 
 # arp problem
 cat >> /etc/sysctl.conf <<EOF
