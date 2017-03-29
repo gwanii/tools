@@ -1,0 +1,13 @@
+[Unit]
+Description=Alerting Service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/nohup /usr/local/bin/alert.py > /dev/null 2&>1 &
+ExecStop=/bin/kill -TERM $MAINPID
+Restart=always
+RestartSec=5s
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target

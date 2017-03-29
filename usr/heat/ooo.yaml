@@ -1,0 +1,62 @@
+heat_template_version: newton
+
+description: ooo, a.k.a. openstack on openstack
+
+parameters:
+
+resources:
+  m1:
+    type: OS::Nova::Server
+    properties:
+      image: centos-7.0-desktop
+      flavor: test
+      networks:
+        - network: oam
+
+  m2:
+    type: OS::Nova::Server
+    properties:
+      image: centos-7.0-desktop
+      flavor: test
+      networks:
+        - network: oam
+        - network: test
+        - network: test
+
+  m3:
+    type: OS::Nova::Server
+    properties:
+      image: centos-7.0-desktop
+      flavor: test
+      networks:
+        - network: oam
+        - network: test
+
+  floatingip_m1:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+      port_id: { get_attr: [m1, addresses, oam, 0, port] }
+
+  floatingip_m2:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+      port_id: { get_attr: [m2, addresses, oam, 0, port] }
+
+  floatingip_m3:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+      port_id: { get_attr: [m3, addresses, oam, 0, port] }
+
+outputs:
+  m1_oam:
+    description: m1 ip
+    value: { get_attr: [floatingip_m1, floating_ip_address] }
+  m2_oam:
+    description: m2 ip
+    value: { get_attr: [floatingip_m2, floating_ip_address] }
+  m3_oam:
+    description: m3 ip
+    value: { get_attr: [floatingip_m3, floating_ip_address] }

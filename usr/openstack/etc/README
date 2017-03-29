@@ -1,0 +1,7 @@
+three node openstack cluster
+=============================
+
+1. packstack install
+2. three node, one as controller node, one as compute node, one as both network and compute node
+3. network: openvswitch + vlan topology
+4. disable security group
