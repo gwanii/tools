@@ -8,7 +8,7 @@ network --device eth0 --bootproto dhcp
 network  --hostname=custom
 rootpw custom
 firewall --disabled
-selinux --enforcing
+selinux --disabled
 timezone --utc Asia/Shanghai
 bootloader --location=mbr --append="console=tty0 console=ttyS0,115200 net.ifnames=0"
 
