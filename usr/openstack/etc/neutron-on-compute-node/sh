@@ -1,4 +1,0 @@
-sed -i '/^#/d' ../neutron/metering_agent.ini
-sed -i '/^#/d' metering_agent.ini
-sed -i '/^$/d' ../neutron/metering_agent.ini
-sed -i '/^$/d' metering_agent.ini
