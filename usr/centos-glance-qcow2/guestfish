@@ -1,0 +1,6 @@
+><fs> cat /etc/sysconfig/network-scripts/ifcfg-eth1
+IPV6INIT=yes
+BOOTPROTO=dhcp
+DEVICE=eth1
+ONBOOT=yes
+NM_CONTROLLED=no

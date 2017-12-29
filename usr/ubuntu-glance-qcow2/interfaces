@@ -1,0 +1,30 @@
+# interfaces(5) file used by ifup(8) and ifdown(8)
+# Include files from /etc/network/interfaces.d:
+source-directory /etc/network/interfaces.d
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet dhcp
+
+auto eth2
+iface eth2 inet dhcp
+
+auto eth3
+iface eth3 inet dhcp
+
+auto eth4
+iface eth4 inet dhcp
+
+auto eth5
+iface eth5 inet dhcp
+
+auto eth6
+iface eth6 inet dhcp
+
+auto eth7
+iface eth7 inet dhcp
