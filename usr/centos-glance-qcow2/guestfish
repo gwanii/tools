@@ -4,3 +4,6 @@ BOOTPROTO=dhcp
 DEVICE=eth1
 ONBOOT=yes
 NM_CONTROLLED=no
+
+><fs> vi /etc/sysconfig/network-scripts/ifup-eth
+# line 100 --> "exit 0"
