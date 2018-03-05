@@ -1,5 +1,5 @@
 #!/bin/bash
-[[ ! x$(getenforce) -eq x"Disabled" ]] && setenforce 0
+[[ ! x$(getenforce) == x"Disabled" ]] && setenforce 0
 sed -i 's/^SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 which keepalived &> /dev/null || yum install -y keepalived
 pushd /etc/keepalived > /dev/null
