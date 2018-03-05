@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ ! -x "/usr/bin/vagrant" ]; then
   echo "Installing vagrant and associated tools..."
-  sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev nfs-kernel-server
+  sudo apt-get -y install qemu-kvm libvirt-bin libvirt-dev
   sudo adduser $USER libvirtd
 
   VAGRANT_SHA256SUM="faff6befacc7eed3978b4b71f0dbb9c135c01d8a4d13236bda2f9ed53482d2c4"  # version 1.9.3
