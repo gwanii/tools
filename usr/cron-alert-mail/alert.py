@@ -1,9 +1,9 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#import sys
-#reload(sys)
-#sys.setdefaultencoding('utf-8')
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 import copy
 import imp
@@ -222,20 +222,20 @@ if __name__ == '__main__':
     elif len(sys.argv) == 3 and sys.argv[1] in ('-c', '--config-file'):
         cfgpath = os.path.abspath(sys.argv[2])
     elif len(sys.argv) == 2 and sys.argv[1] == '-h':
-        print help_msg
+        print(help_msg)
         sys.exit(1)
     else:
-        print 'Unknown option: %s' % ' '.join(sys.argv[1:])
-        print help_msg
+        print('Unknown option: {}'.format(' '.join(sys.argv[1:])
+        print(help_msg)
         sys.exit(1)
 
     # load config
     try:
         imp.load_source('cfg', cfgpath)
         import cfg
-        print 'Load module <cfg> from source <%s>.' % cfgpath
+        print('Load module <cfg> from source <%s>.' % cfgpath)
     except IOError:
-        print 'Config file not exists or error format.'
+        print('Config file not exists or error format.')
         sys.exit(1)
 
     # log settings

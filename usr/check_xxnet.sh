@@ -7,7 +7,7 @@ ok() {
 xxnet() {
   ps -ef|grep "XX-Net"|grep -v grep|head -n1|awk '{print $2}'|xargs kill -9 2>/dev/null || true
   ps -ef|grep "code/default/launcher/start.py"|grep -v grep|head -n1|awk '{print $2}'|xargs kill -9 2>/dev/null || true
-  echo "Start XX-Net." && /hhh/start
+  echo "Start XX-Net." && sudo systemctl restart miredo && /hhh/start
 }
 
 ok || xxnet
