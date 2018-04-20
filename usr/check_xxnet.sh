@@ -6,8 +6,7 @@ ok() {
 }
 
 xxnet() {
-  ps -ef|grep "XX-Net"|grep -v grep|head -n1|awk '{print $2}'|xargs kill -9 2>/dev/null || true
-  ps -ef|grep "code/default/launcher/start.py"|grep -v grep|head -n1|awk '{print $2}'|xargs kill -9 2>/dev/null || true
+  pgrep -a python | grep "code/[0-9].*[0-9]/launcher/start.py" | cut -d" " -f1 | xargs kill -9 2> /dev/null || true
   sed -i 's#launchWithHungup $ARGS#launchWithNoHungup $ARGS#g' /home/xx/Downloads/XX-Net-3.9.6/start
   echo "Start XX-Net." && sudo systemctl restart miredo && /home/xx/Downloads/XX-Net-3.9.6/start
 }

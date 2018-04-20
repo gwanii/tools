@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 	"sort"
 	"time"
 
@@ -62,7 +63,14 @@ func main() {
 
 	}
 	sort.Sort(at)
-	for _, a := range at.addr {
-		fmt.Printf("Address: %s, RTT: %s\n", a, at.rtt[a])
+	fmt.Printf("Address: %s, RTT: %s\n", at.addr[0], at.rtt[at.addr[0]])
+	conf := fmt.Sprintf("InterfaceName teredo\nServerAddress %s\nServerAddress2 %s\n", at.addr[0], at.addr[1])
+	f, err := os.OpenFile("/etc/miredo.conf", os.O_TRUNC|os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	if _, err := f.WriteString(conf); err != nil {
+		panic(err)
 	}
 }
