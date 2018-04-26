@@ -1,6 +1,7 @@
 #!/bin/bash
-INSTALL=$HOME/.top10_high_cpu_process
-LOG=/var/log/top10_high_cpu_process
+APP=top10_high_cpu_process
+INSTALL=$HOME/.$APP
+LOG=/var/log/$APP
 
 yum_install() {
   for pkg in "$@"; do
@@ -13,7 +14,7 @@ start_service() {
 }
 
 add_cron() {
-  (crontab -l 2> /dev/null; echo "$1") | crontab -
+  (crontab -l | grep -v $APP 2> /dev/null; echo "$1") | crontab -
 }
 
 yum_install cronie logrotate
@@ -21,24 +22,24 @@ start_service crond
 # cron
 [[ ! -d "$INSTALL" ]] && mkdir -p "$INSTALL"
 [[ ! -d "$LOG" ]] && mkdir -p "$LOG"
-cat <<EOF > $INSTALL/log_top10.sh
+cat <<EOF > $INSTALL/$APP.sh
 #!/bin/bash
-LOG=/var/log/top10_high_cpu_process
-
 step=2
 for (( i = 0; i < 60; i=(i+step) )); do
-  ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 11 > \$LOG/\$(date +%Y%m%d-%H%M%S).log
+  date +%Y-%m-%d-%H-%M-%S >> $LOG/$APP.log
+  ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -n 11 >> $LOG/$APP.log
+  echo >> $LOG/$APP.log
   sleep \$step
 done
 EOF
-chmod +x $INSTALL/log_top10.sh
-add_cron "* * * * * $INSTALL/log_top10.sh"
+chmod +x $INSTALL/$APP.sh
+add_cron "* * * * * $INSTALL/$APP.sh"
 # logrotate
-cat <<EOF > /etc/logrotate.d/top10_high_cpu_process
-/var/log/top10_high_cpu_process/*.log {
+cat <<EOF > /etc/logrotate.d/$APP
+/var/log/$APP/$APP.log {
     daily
     rotate 1
-    size 50M
+    size 40M
     missingok
     compress
     copytruncate
