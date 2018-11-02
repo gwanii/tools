@@ -1,5 +1,5 @@
 #!/bin/bash
-exclude_images="centos-7.2"
+exclude_images="centos|15.20|15.21|15.22|15.30"
 glance_dir="/var/lib/glance/images"
 remote=192.168.9.2
 
@@ -9,6 +9,6 @@ for image in $(glance image-list|grep -vE "$exclude_images"|awk '{print $2"#"$4}
   echo "- Copy image: $name to ${remote}..."
   rsync -v "$glance_dir"/"$id" "$remote":"$glance_dir"/"$name"
   echo "- Upload image: $name to glance..."
-  ssh "$remote" "source ~/.bashrc; glance image-create --name $name --disk-format qcow2 --container-format bare --visibility public --property hw_watchdog_action=pause --progress < $glance_dir/$name; rm $glance_dir/$name"
+  ssh "$remote" "source ~/.bashrc; glance image-create --name migrate-$name --disk-format qcow2 --container-format bare --visibility public --property hw_watchdog_action=pause --progress < $glance_dir/$name; rm $glance_dir/$name"
   echo "---"
 done

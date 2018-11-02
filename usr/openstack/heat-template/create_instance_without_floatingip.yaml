@@ -1,0 +1,43 @@
+heat_template_version: newton
+
+description: dev
+
+parameters:
+  image:
+    type: string
+    default: centos-7.2-server
+
+  flavor:
+    type: string
+    default: m1.medium
+
+  secgroup:
+    type: string
+    default: bbb
+
+resources:
+  m1:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      networks:
+        - network: flat14
+      security_groups: [{ get_param: secgroup }]
+
+  m2:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      networks:
+        - network: flat14
+      security_groups: [{ get_param: secgroup }]
+
+outputs:
+  test_oam_m1_ip:
+    description: m1 oam ip
+    value: { get_attr: [m1, networks, flat14, 0] }
+  test_oam_m2_ip:
+    description: m2 oam ip
+    value: { get_attr: [m2, networks, flat14, 0] }
