@@ -38,7 +38,7 @@ wireshark-gnome
 
 %post
 # forbid update kernel
-sed -i '/\[main\]/a exclude=kernel* centos-release' /etc/yum.conf
+sed -i -e '/^exclude/d' -e '/\[main\]/a exclude=kernel* centos-release initscripts' /etc/yum.conf
 yum update -y
 yum install -y epel-release
 yum install -y acpid
